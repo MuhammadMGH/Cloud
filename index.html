@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مسیرهای یادگیری کسر - پایه چهارم</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f9ff;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 25px 0;
+            background: linear-gradient(135deg, #4a6fa5, #2c3e50);
+            color: white;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .progress-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 30px 0;
+            position: relative;
+        }
+        
+        .progress-step {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.1rem;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s;
+        }
+        
+        .progress-step:hover {
+            transform: scale(1.05);
+        }
+        
+        .step-c {
+            background-color: #3498db;
+        }
+        
+        .step-b {
+            background-color: #f39c12;
+        }
+        
+        .step-a {
+            background-color: #e74c3c;
+        }
+        
+        .step-label {
+            margin-top: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .progress-line {
+            height: 8px;
+            background-color: #ddd;
+            position: absolute;
+            top: 50%;
+            left: 15%;
+            right: 15%;
+            transform: translateY(-50%);
+            z-index: 1;
+            border-radius: 4px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, #3498db, #f39c12, #e74c3c);
+            width: 33%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .worksheet {
+            flex: 1;
+            min-width: 300px;
+            background-color: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .worksheet:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+        }
+        
+        .worksheet-c {
+            border-top: 8px solid #3498db;
+        }
+        
+        .worksheet-b {
+            border-top: 8px solid #f39c12;
+        }
+        
+        .worksheet-a {
+            border-top: 8px solid #e74c3c;
+        }
+        
+        .worksheet-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px dashed #eee;
+        }
+        
+        .worksheet-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .worksheet-status {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+        
+        .status-c {
+            background-color: #e1f0fa;
+            color: #3498db;
+        }
+        
+        .status-b {
+            background-color: #fef5e7;
+            color: #f39c12;
+        }
+        
+        .status-a {
+            background-color: #fdedec;
+            color: #e74c3c;
+        }
+        
+        .section {
+            margin-bottom: 25px;
+        }
+        
+        .section-title {
+            font-size: 1.2rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            padding-right: 10px;
+            border-right: 4px solid;
+        }
+        
+        .section-c .section-title {
+            border-right-color: #3498db;
+        }
+        
+        .section-b .section-title {
+            border-right-color: #f39c12;
+        }
+        
+        .section-a .section-title {
+            border-right-color: #e74c3c;
+        }
+        
+        .shape-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 5px;
+            margin: 15px 0;
+            max-width: 200px;
+        }
+        
+        .shape-cell {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #bbb;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .shape-cell:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .shape-cell.active {
+            background-color: #3498db;
+        }
+        
+        .matching-exercise {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .match-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+        
+        .fraction-input {
+            width: 50px;
+            height: 35px;
+            text-align: center;
+            font-size: 1.1rem;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .comparison-input {
+            width: 40px;
+            height: 35px;
+            text-align: center;
+            font-size: 1.1rem;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            margin: 0 10px;
+        }
+        
+        .success-criteria {
+            background-color: #e8f6ef;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border-right: 4px solid #27ae60;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .btn-print {
+            background-color: #2c3e50;
+            color: white;
+        }
+        
+        .btn-submit {
+            background-color: #27ae60;
+            color: white;
+        }
+        
+        .btn-next {
+            background-color: #9b59b6;
+            color: white;
+        }
+        
+        button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        button:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .modal h2 {
+            margin-bottom: 15px;
+            color: #27ae60;
+        }
+        
+        .modal p {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+        
+        .close-btn {
+            background-color: #e74c3c;
+            color: white;
+            margin: 0 auto;
+        }
+        
+        .student-info {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .info-field {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .info-field label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #2c3e50;
+        }
+        
+        .info-field input {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        @media print {
+            .controls, .progress-container, header h1 {
+                display: none !important;
+            }
+            
+            .worksheet {
+                break-inside: avoid;
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+            
+            .shape-cell.active {
+                background-color: #ccc !important;
+                -webkit-print-color-adjust: exact;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .progress-step {
+                width: 90px;
+                height: 90px;
+                font-size: 0.9rem;
+            }
+            
+            .container {
+                flex-direction: column;
+            }
+            
+            .controls {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            button {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><i class="fas fa-chalkboard-teacher"></i> مسیرهای یادگیری کسر - پایه چهارم</h1>
+        <p class="subtitle">پس از تکمیل موفق هر مسیر، به سطح بالاتر راه پیدا می‌کنید</p>
+    </header>
+    
+    <div class="progress-container">
+        <div class="progress-line">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        
+        <div class="progress-step step-c" id="stepC">
+            <i class="fas fa-route fa-2x"></i>
+            <span class="step-label">مسیر C</span>
+            <small>نیازمند تقویت</small>
+        </div>
+        
+        <div class="progress-step step-b" id="stepB">
+            <i class="fas fa-route fa-2x"></i>
+            <span class="step-label">مسیر B</span>
+            <small>سطح متوسط</small>
+        </div>
+        
+        <div class="progress-step step-a" id="stepA">
+            <i class="fas fa-route fa-2x"></i>
+            <span class="step-label">مسیر A</span>
+            <small>پیشرفته</small>
+        </div>
+    </div>
+    
+    <div class="student-info">
+        <div class="info-field">
+            <label for="studentName"><i class="fas fa-user"></i> نام دانش‌آموز:</label>
+            <input type="text" id="studentName" placeholder="نام خود را وارد کنید">
+        </div>
+        <div class="info-field">
+            <label for="studentDate"><i class="fas fa-calendar"></i> تاریخ:</label>
+            <input type="text" id="studentDate" placeholder="تاریخ امروز">
+        </div>
+    </div>
+    
+    <div class="container">
+        <!-- مسیر C -->
+        <div class="worksheet worksheet-c" id="worksheetC">
+            <div class="worksheet-header">
+                <div class="worksheet-title">کاربرگ مسیر C (نیازمند تقویت)</div>
+                <div class="worksheet-status status-c">در حال یادگیری</div>
+            </div>
+            
+            <div class="section section-c">
+                <div class="section-title">✳️ بخش ۱: رنگ‌آمیزی کن</div>
+                <p>شکل زیر را نگاه کن.</p>
+                <p>🔹 نصف شکل را رنگ کن.</p>
+                
+                <div class="shape-grid" id="shapeGrid1">
+                    <!-- مربع‌ها با JavaScript تولید می‌شوند -->
+                </div>
+                
+                <p>یک‌چهارم شکل زیر را رنگ کن.</p>
+                
+                <div class="shape-grid" style="grid-template-columns: repeat(2, 1fr); max-width: 100px;" id="shapeGrid2">
+                    <!-- مربع‌ها با JavaScript تولید می‌شوند -->
+                </div>
+            </div>
+            
+            <div class="section section-c">
+                <div class="section-title">✳️ بخش ۲: وصل کن</div>
+                <p>هر تصویر را به کسر درست وصل کن:</p>
+                
+                <div class="matching-exercise">
+                    <div class="match-item">
+                        <span>🍕 نصف پیتزا</span>
+                        <span>→</span>
+                        <select class="fraction-input" id="match1">
+                            <option value="">انتخاب</option>
+                            <option value="1/2">1/2</option>
+                            <option value="1/3">1/3</option>
+                            <option value="1/4">1/4</option>
+                        </select>
+                    </div>
+                    
+                    <div class="match-item">
+                        <span>🍰 یک تکه از چهار تکه</span>
+                        <span>→</span>
+                        <select class="fraction-input" id="match2">
+                            <option value="">انتخاب</option>
+                            <option value="1/2">1/2</option>
+                            <option value="1/3">1/3</option>
+                            <option value="1/4">1/4</option>
+                        </select>
+                    </div>
+                    
+                    <div class="match-item">
+                        <span>🍎 یک تکه از سه تکه</span>
+                        <span>→</span>
+                        <select class="fraction-input" id="match3">
+                            <option value="">انتخاب</option>
+                            <option value="1/2">1/2</option>
+                            <option value="1/3">1/3</option>
+                            <option value="1/4">1/4</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section section-c">
+                <div class="section-title">✳️ بخش ۳: بگو و نشان بده (ارزیابی شفاهی)</div>
+                <p>معلم می‌پرسد:</p>
+                <ul style="padding-right: 20px; margin-top: 10px;">
+                    <li style="margin-bottom: 10px;">کدام شکل نصف است؟</li>
+                    <li>اگر سیب را به ۲ قسمت مساوی تقسیم کنیم، هر قسمت چه کسری است؟</li>
+                </ul>
+            </div>
+            
+            <div class="success-criteria">
+                <strong>✅ معیار موفقیت:</strong> درک مفهوم جزء و کل به‌صورت عملی
+            </div>
+        </div>
+        
+        <!-- مسیر B -->
+        <div class="worksheet worksheet-b" id="worksheetB" style="display: none;">
+            <div class="worksheet-header">
+                <div class="worksheet-title">کاربرگ مسیر B (سطح متوسط)</div>
+                <div class="worksheet-status status-b">قفل شده</div>
+            </div>
+            
+            <div class="section section-b">
+                <div class="section-title">✳️ بخش ۱: کامل کن</div>
+                <p>اگر یک شکل به 4 قسمت مساوی تقسیم شود و 3 قسمت آن رنگی باشد، کسر برابر است با:</p>
+                <div style="display: flex; align-items: center; gap: 10px; margin: 15px 0;">
+                    <input type="text" class="fraction-input" id="fraction1a" maxlength="1">
+                    <span>/</span>
+                    <input type="text" class="fraction-input" id="fraction1b" maxlength="1">
+                </div>
+                
+                <p>اگر 2 قسمت از 5 قسمت مساوی رنگ شود، کسر برابر است با:</p>
+                <div style="display: flex; align-items: center; gap: 10px; margin: 15px 0;">
+                    <input type="text" class="fraction-input" id="fraction2a" maxlength="1">
+                    <span>/</span>
+                    <input type="text" class="fraction-input" id="fraction2b" maxlength="1">
+                </div>
+            </div>
+            
+            <div class="section section-b">
+                <div class="section-title">✳️ بخش ۲: مقایسه کن ( > < = )</div>
+                
+                <div style="margin: 20px 0;">
+                    <div style="display: flex; align-items: center; margin: 15px 0;">
+                        <span>1/2</span>
+                        <input type="text" class="comparison-input" id="compare1" maxlength="1">
+                        <span>1/4</span>
+                    </div>
+                    
+                    <div style="display: flex; align-items: center; margin: 15px 0;">
+                        <span>3/4</span>
+                        <input type="text" class="comparison-input" id="compare2" maxlength="1">
+                        <span>2/4</span>
+                    </div>
+                    
+                    <div style="display: flex; align-items: center; margin: 15px 0;">
+                        <span>1/3</span>
+                        <input type="text" class="comparison-input" id="compare3" maxlength="1">
+                        <span>1/3</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section section-b">
+                <div class="section-title">✳️ بخش ۳: مسئله</div>
+                <p>علی یک شکلات را به 4 قسمت مساوی تقسیم کرد و 1 قسمت آن را خورد.</p>
+                <ul style="padding-right: 20px; margin: 15px 0;">
+                    <li style="margin-bottom: 10px;">علی چه کسری از شکلات را خورد؟</li>
+                    <li>چه کسری باقی مانده است؟</li>
+                </ul>
+                
+                <div style="margin-top: 20px;">
+                    <p>✏️ پاسخ:</p>
+                    <textarea id="answerB" rows="3" style="width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 5px; font-size: 1rem; margin-top: 10px;" placeholder="پاسخ خود را بنویسید..."></textarea>
+                </div>
+            </div>
+            
+            <div class="success-criteria">
+                <strong>✅ معیار موفقیت:</strong> تشخیص و مقایسه کسرهای ساده
+            </div>
+        </div>
+        
+        <!-- مسیر A -->
+        <div class="worksheet worksheet-a" id="worksheetA" style="display: none;">
+            <div class="worksheet-header">
+                <div class="worksheet-title">کاربرگ مسیر A (پیشرفته)</div>
+                <div class="worksheet-status status-a">قفل شده</div>
+            </div>
+            
+            <div class="section section-a">
+                <div class="section-title">✳️ بخش ۱: ساده کن</div>
+                
+                <div style="margin: 20px 0;">
+                    <div style="display: flex; align-items: center; margin: 15px 0;">
+                        <span>2/4 =</span>
+                        <input type="text" class="fraction-input" id="simplify1a" maxlength="1">
+                        <span>/</span>
+                        <input type="text" class="fraction-input" id="simplify1b" maxlength="1">
+                    </div>
+                    
+                    <div style="display: flex; align-items: center; margin: 15px 0;">
+                        <span>3/6 =</span>
+                        <input type="text" class="fraction-input" id="simplify2a" maxlength="1">
+                        <span>/</span>
+                        <input type="text" class="fraction-input" id="simplify2b" maxlength="1">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section section-a">
+                <div class="section-title">✳️ بخش ۲: مقایسه کن</div>
+                <p style="color: #666; font-size: 0.9rem; margin-bottom: 10px;">(راهنما: اگر لازم است کسرها را هم‌مخرج کن)</p>
+                
+                <div style="margin: 20px 0;">
+                    <div style="display: flex; align-items: center; margin: 15px 0;">
+                        <span>3/4</span>
+                        <input type="text" class="comparison-input" id="compareA1" maxlength="1">
+                        <span>5/8</span>
+                    </div>
+                    
+                    <div style="display: flex; align-items: center; margin: 15px 0;">
+                        <span>2/3</span>
+                        <input type="text" class="comparison-input" id="compareA2" maxlength="1">
+                        <span>4/6</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section section-a">
+                <div class="section-title">✳️ بخش ۳: تبدیل کن</div>
+                
+                <div style="margin: 20px 0;">
+                    <div style="display: flex; align-items: center; margin: 15px 0;">
+                        <span>1/2 =</span>
+                        <input type="text" class="fraction-input" id="convert1" style="width: 80px;" placeholder="0.5">
+                    </div>
+                    
+                    <div style="display: flex; align-items: center; margin: 15px 0;">
+                        <span>1/4 =</span>
+                        <input type="text" class="fraction-input" id="convert2" style="width: 80px;" placeholder="0.25">
+                    </div>
+                    
+                    <div style="display: flex; align-items: center; margin: 15px 0;">
+                        <span>3/10 =</span>
+                        <input type="text" class="fraction-input" id="convert3" style="width: 80px;" placeholder="0.3">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section section-a">
+                <div class="section-title">✳️ بخش ۴: مسئله چالشی ⭐</div>
+                <p>0.5 لیتر آب در بطری است.</p>
+                <ul style="padding-right: 20px; margin: 15px 0;">
+                    <li style="margin-bottom: 10px;">این مقدار برابر با چه کسری است؟</li>
+                    <li>اگر 0.25 لیتر دیگر اضافه شود، کل آب چند لیتر می‌شود؟</li>
+                </ul>
+                
+                <div style="margin-top: 20px;">
+                    <p>✏️ پاسخ کامل بنویس:</p>
+                    <textarea id="answerA" rows="4" style="width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 5px; font-size: 1rem; margin-top: 10px;" placeholder="پاسخ خود را به طور کامل بنویسید..."></textarea>
+                </div>
+            </div>
+            
+            <div class="success-criteria">
+                <strong>✅ معیار موفقیت:</strong> تسلط بر کسر، مقایسه پیشرفته و تبدیل به اعشار
+            </div>
+        </div>
+    </div>
+    
+    <div class="controls">
+        <button class="btn-print" id="printBtn">
+            <i class="fas fa-print"></i> چاپ کاربرگ
+        </button>
+        
+        <button class="btn-submit" id="submitBtn">
+            <i class="fas fa-check-circle"></i> ارزیابی پاسخ‌ها
+        </button>
+        
+        <button class="btn-next" id="nextBtn" disabled>
+            <i class="fas fa-arrow-right"></i> رفتن به مسیر بعدی
+        </button>
+    </div>
+    
+    <!-- Modal برای نمایش نتایج -->
+    <div class="modal" id="resultModal">
+        <div class="modal-content">
+            <h2 id="modalTitle">نتایج ارزیابی</h2>
+            <p id="modalMessage"></p>
+            <button class="close-btn" id="closeModalBtn">
+                <i class="fas fa-times"></i> بستن
+            </button>
+        </div>
+    </div>
+    
+    <script>
+        // تنظیم تاریخ امروز
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date().toLocaleDateString('fa-IR');
+            document.getElementById('studentDate').value = today;
+            
+            // ایجاد مربع‌ها برای بخش رنگ‌آمیزی
+            createShapeGrid('shapeGrid1', 8);
+            createShapeGrid('shapeGrid2', 4);
+            
+            // رویداد کلیک برای مربع‌ها
+            document.querySelectorAll('.shape-cell').forEach(cell => {
+                cell.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                });
+            });
+            
+            // رویداد چاپ
+            document.getElementById('printBtn').addEventListener('click', function() {
+                window.print();
+            });
+            
+            // رویداد ارزیابی
+            document.getElementById('submitBtn').addEventListener('click', evaluateWorksheet);
+            
+            // رویداد رفتن به مسیر بعدی
+            document.getElementById('nextBtn').addEventListener('click', goToNextPath);
+            
+            // رویداد بستن مودال
+            document.getElementById('closeModalBtn').addEventListener('click', function() {
+                document.getElementById('resultModal').style.display = 'none';
+            });
+            
+            // مقداردهی اولیه پیشرفت
+            updateProgress();
+        });
+        
+        // تابع ایجاد شبکه مربع‌ها
+        function createShapeGrid(containerId, count) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            
+            for (let i = 0; i < count; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'shape-cell';
+                container.appendChild(cell);
+            }
+            
+            // افزودن رویداد کلیک به مربع‌های جدید
+            container.querySelectorAll('.shape-cell').forEach(cell => {
+                cell.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                });
+            });
+        }
+        
+        // تابع به‌روزرسانی پیشرفت
+        function updateProgress() {
+            const currentPath = getCurrentPath();
+            const progressFill = document.getElementById('progressFill');
+            
+            // تنظیم عرض نوار پیشرفت بر اساس مسیر فعلی
+            if (currentPath === 'C') {
+                progressFill.style.width = '33%';
+                document.getElementById('stepC').style.transform = 'scale(1.1)';
+                document.getElementById('stepB').style.transform = 'scale(1)';
+                document.getElementById('stepA').style.transform = 'scale(1)';
+            } else if (currentPath === 'B') {
+                progressFill.style.width = '66%';
+                document.getElementById('stepC').style.opacity = '0.7';
+                document.getElementById('stepB').style.transform = 'scale(1.1)';
+                document.getElementById('stepA').style.transform = 'scale(1)';
+            } else if (currentPath === 'A') {
+                progressFill.style.width = '100%';
+                document.getElementById('stepC').style.opacity = '0.7';
+                document.getElementById('stepB').style.opacity = '0.7';
+                document.getElementById('stepA').style.transform = 'scale(1.1)';
+            }
+        }
+        
+        // تابع تشخیص مسیر فعلی
+        function getCurrentPath() {
+            const worksheetC = document.getElementById('worksheetC');
+            const worksheetB = document.getElementById('worksheetB');
+            const worksheetA = document.getElementById('worksheetA');
+            
+            if (worksheetC.style.display !== 'none') return 'C';
+            if (worksheetB.style.display !== 'none') return 'B';
+            if (worksheetA.style.display !== 'none') return 'A';
+            return 'C'; // پیش‌فرض
+        }
+        
+        // تابع ارزیابی کاربرگ
+        function evaluateWorksheet() {
+            const currentPath = getCurrentPath();
+            let score = 0;
+            let total = 0;
+            let message = '';
+            
+            if (currentPath === 'C') {
+                // ارزیابی مسیر C
+                total = 5;
+                
+                // بخش ۱: رنگ‌آمیزی (نصف شکل = 4 مربع از ۸ تا)
+                const activeCells1 = document.querySelectorAll('#shapeGrid1 .shape-cell.active').length;
+                if (activeCells1 === 4) score += 1;
+                
+                // بخش ۱: رنگ‌آمیزی (یک‌چهارم شکل = 1 مربع از ۴ تا)
+                const activeCells2 = document.querySelectorAll('#shapeGrid2 .shape-cell.active').length;
+                if (activeCells2 === 1) score += 1;
+                
+                // بخش ۲: وصل کردن
+                if (document.getElementById('match1').value === '1/2') score += 1;
+                if (document.getElementById('match2').value === '1/4') score += 1;
+                if (document.getElementById('match3').value === '1/3') score += 1;
+                
+                const percentage = (score / total) * 100;
+                
+                if (percentage >= 80) {
+                    message = `آفرین! شما ${score} از ${total} سؤال را درست پاسخ دادید (${percentage}%). <br>شما در مسیر C موفق شدید و اکنون می‌توانید به مسیر B بروید.`;
+                    document.getElementById('nextBtn').disabled = false;
+                    
+                    // فعال کردن مسیر B
+                    document.querySelector('#worksheetB .worksheet-status').textContent = 'آماده برای شروع';
+                    document.querySelector('#worksheetB .worksheet-status').classList.remove('status-b');
+                    document.querySelector('#worksheetB .worksheet-status').classList.add('status-c');
+                } else {
+                    message = `شما ${score} از ${total} سؤال را درست پاسخ دادید (${percentage}%). <br>لطفاً دوباره تلاش کنید تا بتوانید به مسیر بعدی بروید.`;
+                    document.getElementById('nextBtn').disabled = true;
+                }
+            } 
+            else if (currentPath === 'B') {
+                // ارزیابی مسیر B
+                total = 8;
+                
+                // بخش ۱: کامل کن
+                if (document.getElementById('fraction1a').value === '3' && 
+                    document.getElementById('fraction1b').value === '4') score += 1;
+                if (document.getElementById('fraction2a').value === '2' && 
+                    document.getElementById('fraction2b').value === '5') score += 1;
+                
+                // بخش ۲: مقایسه کن
+                if (document.getElementById('compare1').value === '>') score += 1;
+                if (document.getElementById('compare2').value === '>') score += 1;
+                if (document.getElementById('compare3').value === '=') score += 1;
+                
+                // بخش ۳: مسئله (پاسخ صحیح: 1/4 و 3/4)
+                const answer = document.getElementById('answerB').value.toLowerCase();
+                if (answer.includes('1/4') || answer.includes('یک چهارم')) score += 1;
+                if (answer.includes('3/4') || answer.includes('سه چهارم')) score += 1;
+                
+                const percentage = (score / total) * 100;
+                
+                if (percentage >= 75) {
+                    message = `عالی! شما ${score} از ${total} سؤال را درست پاسخ دادید (${percentage}%). <br>شما در مسیر B موفق شدید و اکنون می‌توانید به مسیر A بروید.`;
+                    document.getElementById('nextBtn').disabled = false;
+                    
+                    // فعال کردن مسیر A
+                    document.querySelector('#worksheetA .worksheet-status').textContent = 'آماده برای شروع';
+                    document.querySelector('#worksheetA .worksheet-status').classList.remove('status-a');
+                    document.querySelector('#worksheetA .worksheet-status').classList.add('status-c');
+                } else {
+                    message = `شما ${score} از ${total} سؤال را درست پاسخ دادید (${percentage}%). <br>لطفاً دوباره تلاش کنید تا بتوانید به مسیر بعدی بروید.`;
+                    document.getElementById('nextBtn').disabled = true;
+                }
+            }
+            else if (currentPath === 'A') {
+                // ارزیابی مسیر A
+                total = 9;
+                
+                // بخش ۱: ساده کن
+                if (document.getElementById('simplify1a').value === '1' && 
+                    document.getElementById('simplify1b').value === '2') score += 1;
+                if (document.getElementById('simplify2a').value === '1' && 
+                    document.getElementById('simplify2b').value === '2') score += 1;
+                
+                // بخش ۲: مقایسه کن
+                if (document.getElementById('compareA1').value === '>') score += 1;
+                if (document.getElementById('compareA2').value === '=') score += 1;
+                
+                // بخش ۳: تبدیل کن
+                if (document.getElementById('convert1').value === '0.5') score += 1;
+                if (document.getElementById('convert2').value === '0.25') score += 1;
+                if (document.getElementById('convert3').value === '0.3') score += 1;
+                
+                // بخش ۴: مسئله چالشی
+                const answer = document.getElementById('answerA').value.toLowerCase();
+                if (answer.includes('1/2') || answer.includes('نصف') || answer.includes('0.5')) score += 0.5;
+                if (answer.includes('0.75') || answer.includes('سه چهارم') || answer.includes('3/4')) score += 0.5;
+                
+                const percentage = (score / total) * 100;
+                
+                if (percentage >= 80) {
+                    message = `تبریک! شما ${score} از ${total} سؤال را درست پاسخ دادید (${percentage}%). <br>شما تمام مراحل را با موفقیت پشت سر گذاشتید!`;
+                    document.getElementById('nextBtn').disabled = true;
+                    document.getElementById('nextBtn').innerHTML = '<i class="fas fa-trophy"></i> تکمیل تمام مسیرها';
+                } else {
+                    message = `شما ${score} از ${total} سؤال را درست پاسخ دادید (${percentage}%). <br>برای تکمیل این مرحله باید حداقل ۸۰٪ نمره را کسب کنید.`;
+                    document.getElementById('nextBtn').disabled = true;
+                }
+            }
+            
+            // نمایش مودال با نتایج
+            document.getElementById('modalTitle').textContent = `نتایج ارزیابی مسیر ${currentPath}`;
+            document.getElementById('modalMessage').innerHTML = message;
+            document.getElementById('resultModal').style.display = 'flex';
+        }
+        
+        // تابع رفتن به مسیر بعدی
+        function goToNextPath() {
+            const currentPath = getCurrentPath();
+            
+            if (currentPath === 'C') {
+                // رفتن از مسیر C به B
+                document.getElementById('worksheetC').style.display = 'none';
+                document.getElementById('worksheetB').style.display = 'block';
+                document.getElementById('worksheetA').style.display = 'none';
+                
+                // به‌روزرسانی وضعیت
+                document.getElementById('stepC').style.opacity = '0.7';
+                document.getElementById('stepB').style.opacity = '1';
+                
+                // غیرفعال کردن دکمه بعدی تا ارزیابی انجام شود
+                document.getElementById('nextBtn').disabled = true;
+            } 
+            else if (currentPath === 'B') {
+                // رفتن از مسیر B به A
+                document.getElementById('worksheetC').style.display = 'none';
+                document.getElementById('worksheetB').style.display = 'none';
+                document.getElementById('worksheetA').style.display = 'block';
+                
+                // به‌روزرسانی وضعیت
+                document.getElementById('stepB').style.opacity = '0.7';
+                document.getElementById('stepA').style.opacity = '1';
+                
+                // غیرفعال کردن دکمه بعدی تا ارزیابی انجام شود
+                document.getElementById('nextBtn').disabled = true;
+            }
+            
+            // به‌روزرسانی نوار پیشرفت
+            updateProgress();
+            
+            // پیمایش به بالا
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+    </script>
+</body>
+</html>
